@@ -1,0 +1,557 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>test</title>
+<meta name="generator" content="MATLAB 24.1">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2024-12-06">
+<meta name="DC.source" content="test.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#2"><b> Standing balance analysis *</b>*</a>
+</li>
+<li>
+<a href="#3">load the copStand.mat</a>
+</li>
+<li>
+<a href="#4">plot the cop trajectories</a>
+</li>
+<li>
+<a href="#5">create a function to calculate the SWAY LENGTH using the equation in Table 4</a>
+</li>
+<li>
+<a href="#6">barplot with errorbars of the average sway length in cm for the 4 conditions.</a>
+</li>
+</ul>
+</div>
+<pre class="codeinput">
+<span class="comment">%Juan E. Leon</span>
+<span class="comment">%ju932256</span>
+</pre>
+<h2 id="2">
+<b> Standing balance analysis *</b>*</h2>
+<pre class="codeinput">close <span class="string">all</span>
+clearvars
+clc
+</pre>
+<h2 id="3">load the copStand.mat</h2>
+<pre class="codeinput">load(<span class="string">'copStand.mat'</span>);
+</pre>
+<h2 id="4">plot the cop trajectories</h2>
+<p>in one figure, use 12 subplots to plot the COP for each trial plot subjects as rows and conditions (BothEC, BothEO, OneEC, OneEO) as columns</p>
+<p>Have the AP direction be the y-axis and the ML direction be the x-axis. The COP data is in millimeters.</p>
+<p>use title for the top row of subplots to label the column by the condition use ylabel for the first column of subplots to add the ylabels use xlabel for the bottom row of subplots to add the xlabels use sgtitle to add a supertitle for the whole figure</p>
+<pre class="codeinput">
+<span class="comment">%Creating Subplots</span>
+
+<span class="comment">% First Column</span>
+figure;
+subplot(3,4,1) <span class="comment">%First Row</span>
+plot(S1_BothEC.time, S1_BothEC.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S1_BothEC.time, S1_BothEC.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+<span class="comment">%xlabel('Time (s)');</span>
+ylabel(<span class="string">'COP (mm)'</span>);
+title(<span class="string">'Both EC'</span>);
+legend(<span class="string">'show'</span>);
+sgtitle(<span class="string">'COP Trajectories'</span>);
+grid <span class="string">on</span>;
+
+subplot(3,4,5); <span class="comment">% Second Row</span>
+plot(S2_BothEC.time, S1_BothEC.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S2_BothEC.time, S1_BothEC.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+<span class="comment">%xlabel('Time (s)');</span>
+ylabel(<span class="string">'COP (mm)'</span>);
+
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+subplot(3,4,9); <span class="comment">% Third Row</span>
+plot(S3_BothEC.time, S1_BothEC.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S3_BothEC.time, S1_BothEC.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+xlabel(<span class="string">'Time (s)'</span>);
+ylabel(<span class="string">'COP (mm)'</span>);
+
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+<span class="comment">%Second Column</span>
+subplot(3,4,2) <span class="comment">%First Row</span>
+plot(S1_BothEO.time, S1_BothEO.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S1_BothEO.time, S1_BothEO.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+<span class="comment">%xlabel('Time (s)');</span>
+<span class="comment">%ylabel('COP (mm)');</span>
+title(<span class="string">'BothEO'</span>);
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+subplot(3,4,6); <span class="comment">% Second Row</span>
+plot(S2_BothEO.time, S1_BothEO.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S2_BothEO.time, S1_BothEO.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+<span class="comment">%xlabel('Time (s)');</span>
+<span class="comment">%ylabel('COP (mm)');</span>
+
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+subplot(3,4,10); <span class="comment">% Third Row</span>
+plot(S3_BothEO.time, S1_BothEO.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S3_BothEO.time, S1_BothEO.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+xlabel(<span class="string">'Time (s)'</span>);
+<span class="comment">%ylabel('COP (mm)');</span>
+
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+<span class="comment">%Third Column</span>
+subplot(3,4,3) <span class="comment">%First Row</span>
+plot(S1_OneEC.time, S1_OneEC.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S1_OneEC.time, S1_OneEC.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+<span class="comment">%xlabel('Time (s)');</span>
+<span class="comment">%ylabel('COP (mm)');</span>
+title(<span class="string">'OneEC'</span>);
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+subplot(3,4,7); <span class="comment">% Second Row</span>
+plot(S2_OneEC.time, S1_OneEC.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S2_OneEC.time, S1_OneEC.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+<span class="comment">%xlabel('Time (s)');</span>
+<span class="comment">%ylabel('COP (mm)');</span>
+
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+subplot(3,4,11); <span class="comment">% Third Row</span>
+plot(S3_OneEC.time, S1_OneEC.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S3_OneEC.time, S1_OneEC.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+<span class="comment">%xlabel('Time (s)');</span>
+<span class="comment">%ylabel('COP (mm)');</span>
+
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+<span class="comment">%Fourth Column</span>
+subplot(3,4,4) <span class="comment">%First Row</span>
+plot(S1_OneEO.time, S1_OneEO.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S1_OneEO.time, S1_OneEO.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+<span class="comment">%xlabel('Time (s)');</span>
+<span class="comment">%ylabel('COP (mm)');</span>
+title(<span class="string">'OneEO'</span>);
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+subplot(3,4,8); <span class="comment">% Second Row</span>
+plot(S2_OneEO.time, S1_OneEO.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S2_OneEO.time, S1_OneEO.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+<span class="comment">%xlabel('Time (s)');</span>
+<span class="comment">%ylabel('COP (mm)');</span>
+
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+
+subplot(3,4,12); <span class="comment">% Third Row</span>
+plot(S3_OneEO.time, S1_OneEO.CoP_X, <span class="string">'r'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP X'</span>);
+hold <span class="string">on</span>;
+plot(S3_OneEO.time, S1_OneEO.CoP_Y, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>, <span class="string">'COP Y'</span>);
+xlabel(<span class="string">'Time (s)'</span>);
+<span class="comment">%ylabel('COP (mm)');</span>
+
+legend(<span class="string">'show'</span>);
+grid <span class="string">on</span>;
+</pre>
+<h2 id="5">create a function to calculate the SWAY LENGTH using the equation in Table 4</h2>
+<p>From the following paper. Quijoux, F. et al. (2021). A review of center of pressure (COP) variables to quantify standing balance in elderly people: Algorithms and open-access code. Physiological Reports, 9(22), e15067. <a href="https://doi.org/10.14814/phy2.15067">https://doi.org/10.14814/phy2.15067</a>
+</p>
+<pre class="codeinput">
+<span class="keyword">function</span> sway_length = calc_sway_length(COPx, COPy)
+    <span class="comment">%COP delta</span>
+    dx = diff(COPx);
+    dy = diff(COPy);
+
+    <span class="comment">%distance between points</span>
+    distances = sqrt(dx.^2 + dy.^2);
+
+    <span class="comment">%sum of distances</span>
+    sway_length = sum(distances);
+<span class="keyword">end</span>
+</pre>
+<img vspace="5" hspace="5" src="test_01.png" alt=""> <h2 id="6">barplot with errorbars of the average sway length in cm for the 4 conditions.</h2>
+<p>For each condition, average the sway length for the 3 subjects. plot average sway length on the y-axis and conditions on the x-axis. be sure to label everything</p>
+<p>Note the data is in millimeters so you need to convert to cm Make sure everything is labeled. Variables should have units. Calculate sway length for each condition (BothEC, BothEO, OneEC, OneEO)</p>
+<pre class="codeinput">
+<span class="comment">%Subject 1</span>
+sway_S1_BothEC = calc_sway_length(S1_BothEC.CoP_X, S1_BothEC.CoP_Y) / 10;
+sway_S1_BothEO = calc_sway_length(S1_BothEO.CoP_X, S1_BothEO.CoP_Y) / 10;
+sway_S1_OneEC = calc_sway_length(S1_OneEC.CoP_X, S1_OneEC.CoP_Y) / 10;
+sway_S1_OneEO = calc_sway_length(S1_OneEO.CoP_X, S1_OneEO.CoP_Y) / 10;
+
+<span class="comment">% Subject 2</span>
+sway_S2_BothEC = calc_sway_length(S2_BothEC.CoP_X, S2_BothEC.CoP_Y) / 10;
+sway_S2_BothEO = calc_sway_length(S2_BothEO.CoP_X, S2_BothEO.CoP_Y) / 10;
+sway_S2_OneEC = calc_sway_length(S2_OneEC.CoP_X, S2_OneEC.CoP_Y) / 10;
+sway_S2_OneEO = calc_sway_length(S2_OneEO.CoP_X, S2_OneEO.CoP_Y) / 10;
+
+<span class="comment">% Subject 3</span>
+sway_S3_BothEC = calc_sway_length(S3_BothEC.CoP_X, S3_BothEC.CoP_Y) / 10;
+sway_S3_BothEO = calc_sway_length(S3_BothEO.CoP_X, S3_BothEO.CoP_Y) / 10;
+sway_S3_OneEC = calc_sway_length(S3_OneEC.CoP_X, S3_OneEC.CoP_Y) / 10;
+sway_S3_OneEO = calc_sway_length(S3_OneEO.CoP_X, S3_OneEO.CoP_Y) / 10;
+
+<span class="comment">% putting into matrix</span>
+sway_lengths = [
+    sway_S1_BothEC, sway_S2_BothEC, sway_S3_BothEC;
+    sway_S1_BothEO, sway_S2_BothEO, sway_S3_BothEO;
+    sway_S1_OneEC, sway_S2_OneEC, sway_S3_OneEC;
+    sway_S1_OneEO, sway_S2_OneEO, sway_S3_OneEO
+];
+
+<span class="comment">% average and standard deviation</span>
+mean_sway = mean(sway_lengths, 2);
+std_sway = std(sway_lengths, 0, 2);
+
+<span class="comment">% x-axis</span>
+x_ticks = {<span class="string">'BothEC'</span>, <span class="string">'BothEO'</span>, <span class="string">'OneEC'</span>, <span class="string">'OneEO'</span>};
+
+<span class="comment">%Bar plot</span>
+figure;
+bar(mean_sway);
+hold <span class="string">on</span>;
+errorbar(1:4, mean_sway, std_sway, <span class="string">'k'</span>, <span class="string">'LineStyle'</span>, <span class="string">'none'</span>, <span class="string">'LineWidth'</span>, 1.5);
+
+<span class="comment">%labels</span>
+xticks(1:4);
+xticklabels(x_ticks);
+xlabel(<span class="string">'Conditions'</span>);
+ylabel(<span class="string">'Average Sway Length (cm)'</span>);
+title(<span class="string">'Average Sway Length by Condition'</span>);
+grid <span class="string">on</span>;
+
+<span class="comment">%Display the figure</span>
+hold <span class="string">off</span>;
+</pre>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024a</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%Juan E. Leon
+%ju932256
+%% *** Standing balance analysis ***
+close all
+clearvars
+clc
+%% load the copStand.mat
+load('copStand.mat');
+
+%% plot the cop trajectories
+% in one figure, use 12 subplots to plot the COP for each trial
+% plot subjects as rows and conditions (BothEC, BothEO, OneEC, OneEO) as
+% columns
+%
+% Have the AP direction be the y-axis and the ML direction be the x-axis.
+% The COP data is in millimeters.
+%
+% use title for the top row of subplots to label the column by the
+% condition
+% use ylabel for the first column of subplots to add the ylabels
+% use xlabel for the bottom row of subplots to add the xlabels
+% use sgtitle to add a supertitle for the whole figure
+
+%Creating Subplots
+
+% First Column
+figure;
+subplot(3,4,1) %First Row
+plot(S1_BothEC.time, S1_BothEC.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S1_BothEC.time, S1_BothEC.CoP_Y, 'b', 'DisplayName', 'COP Y');
+%xlabel('Time (s)');
+ylabel('COP (mm)');
+title('Both EC');
+legend('show');
+sgtitle('COP Trajectories');
+grid on;
+
+subplot(3,4,5); % Second Row
+plot(S2_BothEC.time, S1_BothEC.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S2_BothEC.time, S1_BothEC.CoP_Y, 'b', 'DisplayName', 'COP Y');
+%xlabel('Time (s)');
+ylabel('COP (mm)');
+
+legend('show');
+grid on;
+
+subplot(3,4,9); % Third Row
+plot(S3_BothEC.time, S1_BothEC.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S3_BothEC.time, S1_BothEC.CoP_Y, 'b', 'DisplayName', 'COP Y');
+xlabel('Time (s)');
+ylabel('COP (mm)');
+
+legend('show');
+grid on;
+
+%Second Column
+subplot(3,4,2) %First Row
+plot(S1_BothEO.time, S1_BothEO.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S1_BothEO.time, S1_BothEO.CoP_Y, 'b', 'DisplayName', 'COP Y');
+%xlabel('Time (s)');
+%ylabel('COP (mm)');
+title('BothEO');
+legend('show');
+grid on;
+
+subplot(3,4,6); % Second Row
+plot(S2_BothEO.time, S1_BothEO.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S2_BothEO.time, S1_BothEO.CoP_Y, 'b', 'DisplayName', 'COP Y');
+%xlabel('Time (s)');
+%ylabel('COP (mm)');
+
+legend('show');
+grid on;
+
+subplot(3,4,10); % Third Row
+plot(S3_BothEO.time, S1_BothEO.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S3_BothEO.time, S1_BothEO.CoP_Y, 'b', 'DisplayName', 'COP Y');
+xlabel('Time (s)');
+%ylabel('COP (mm)');
+
+legend('show');
+grid on;
+
+%Third Column
+subplot(3,4,3) %First Row
+plot(S1_OneEC.time, S1_OneEC.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S1_OneEC.time, S1_OneEC.CoP_Y, 'b', 'DisplayName', 'COP Y');
+%xlabel('Time (s)');
+%ylabel('COP (mm)');
+title('OneEC');
+legend('show');
+grid on;
+
+subplot(3,4,7); % Second Row
+plot(S2_OneEC.time, S1_OneEC.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S2_OneEC.time, S1_OneEC.CoP_Y, 'b', 'DisplayName', 'COP Y');
+%xlabel('Time (s)');
+%ylabel('COP (mm)');
+
+legend('show');
+grid on;
+
+subplot(3,4,11); % Third Row
+plot(S3_OneEC.time, S1_OneEC.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S3_OneEC.time, S1_OneEC.CoP_Y, 'b', 'DisplayName', 'COP Y');
+%xlabel('Time (s)');
+%ylabel('COP (mm)');
+
+legend('show');
+grid on;
+
+%Fourth Column
+subplot(3,4,4) %First Row
+plot(S1_OneEO.time, S1_OneEO.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S1_OneEO.time, S1_OneEO.CoP_Y, 'b', 'DisplayName', 'COP Y');
+%xlabel('Time (s)');
+%ylabel('COP (mm)');
+title('OneEO');
+legend('show');
+grid on;
+
+subplot(3,4,8); % Second Row
+plot(S2_OneEO.time, S1_OneEO.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S2_OneEO.time, S1_OneEO.CoP_Y, 'b', 'DisplayName', 'COP Y');
+%xlabel('Time (s)');
+%ylabel('COP (mm)');
+
+legend('show');
+grid on;
+
+subplot(3,4,12); % Third Row
+plot(S3_OneEO.time, S1_OneEO.CoP_X, 'r', 'DisplayName', 'COP X');
+hold on;
+plot(S3_OneEO.time, S1_OneEO.CoP_Y, 'b', 'DisplayName', 'COP Y');
+xlabel('Time (s)');
+%ylabel('COP (mm)');
+
+legend('show');
+grid on;
+
+
+%% create a function to calculate the SWAY LENGTH using the equation in Table 4
+% From the following paper. Quijoux, F. et al. (2021).
+% A review of center of pressure (COP) variables to quantify standing balance in
+% elderly people: Algorithms and open-access code.
+% Physiological Reports, 9(22), e15067. https://doi.org/10.14814/phy2.15067
+function sway_length = calc_sway_length(COPx, COPy)
+    %COP delta
+    dx = diff(COPx);
+    dy = diff(COPy);
+
+    %distance between points
+    distances = sqrt(dx.^2 + dy.^2);
+
+    %sum of distances
+    sway_length = sum(distances);
+end
+
+%% barplot with errorbars of the average sway length in cm for the 4 conditions.
+% For each condition, average the sway length for the 3 subjects.
+% plot average sway length on the y-axis and conditions on the x-axis.
+% be sure to label everything
+%
+% Note the data is in millimeters so you need to convert to cm
+% Make sure everything is labeled. Variables should have units.
+% Calculate sway length for each condition (BothEC, BothEO, OneEC, OneEO)
+
+%Subject 1
+sway_S1_BothEC = calc_sway_length(S1_BothEC.CoP_X, S1_BothEC.CoP_Y) / 10; 
+sway_S1_BothEO = calc_sway_length(S1_BothEO.CoP_X, S1_BothEO.CoP_Y) / 10; 
+sway_S1_OneEC = calc_sway_length(S1_OneEC.CoP_X, S1_OneEC.CoP_Y) / 10; 
+sway_S1_OneEO = calc_sway_length(S1_OneEO.CoP_X, S1_OneEO.CoP_Y) / 10; 
+
+% Subject 2
+sway_S2_BothEC = calc_sway_length(S2_BothEC.CoP_X, S2_BothEC.CoP_Y) / 10; 
+sway_S2_BothEO = calc_sway_length(S2_BothEO.CoP_X, S2_BothEO.CoP_Y) / 10; 
+sway_S2_OneEC = calc_sway_length(S2_OneEC.CoP_X, S2_OneEC.CoP_Y) / 10; 
+sway_S2_OneEO = calc_sway_length(S2_OneEO.CoP_X, S2_OneEO.CoP_Y) / 10; 
+
+% Subject 3
+sway_S3_BothEC = calc_sway_length(S3_BothEC.CoP_X, S3_BothEC.CoP_Y) / 10; 
+sway_S3_BothEO = calc_sway_length(S3_BothEO.CoP_X, S3_BothEO.CoP_Y) / 10; 
+sway_S3_OneEC = calc_sway_length(S3_OneEC.CoP_X, S3_OneEC.CoP_Y) / 10; 
+sway_S3_OneEO = calc_sway_length(S3_OneEO.CoP_X, S3_OneEO.CoP_Y) / 10; 
+
+% putting into matrix
+sway_lengths = [
+    sway_S1_BothEC, sway_S2_BothEC, sway_S3_BothEC;
+    sway_S1_BothEO, sway_S2_BothEO, sway_S3_BothEO;
+    sway_S1_OneEC, sway_S2_OneEC, sway_S3_OneEC;
+    sway_S1_OneEO, sway_S2_OneEO, sway_S3_OneEO
+];
+
+% average and standard deviation
+mean_sway = mean(sway_lengths, 2);
+std_sway = std(sway_lengths, 0, 2); 
+
+% x-axis
+x_ticks = {'BothEC', 'BothEO', 'OneEC', 'OneEO'};
+
+%Bar plot
+figure;
+bar(mean_sway);
+hold on;
+errorbar(1:4, mean_sway, std_sway, 'k', 'LineStyle', 'none', 'LineWidth', 1.5);
+
+%labels
+xticks(1:4);
+xticklabels(x_ticks);
+xlabel('Conditions');
+ylabel('Average Sway Length (cm)');
+title('Average Sway Length by Condition');
+grid on;
+
+%Display the figure
+hold off;
+
+
+
+
+##### SOURCE END #####
+-->
+</body>
+</html>

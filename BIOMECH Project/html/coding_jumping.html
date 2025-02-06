@@ -1,0 +1,541 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>coding_jumping</title>
+<meta name="generator" content="MATLAB 24.1">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2024-12-06">
+<meta name="DC.source" content="coding_jumping.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1"> Jumping analysis</a>
+</li>
+<li>
+<a href="#2">load the grfJump.mat</a>
+</li>
+<li>
+<a href="#3">create a function version of the zybook lab, Coding: Jumping analyses</a>
+</li>
+<li>
+<a href="#4">get heights for all trials using the do_jump_analyses you wrote</a>
+</li>
+<li>
+<a href="#5">Create a figure to help compare which jump type produced a higher jump</a>
+</li>
+<li>
+<a href="#6">Create a figure to help compare differences in approach</a>
+</li>
+<li>
+<a href="#7">Mean and Standard Deviation Calculations</a>
+</li>
+</ul>
+</div>
+<h2 id="1"> Jumping analysis</h2>
+<pre class="codeinput">close <span class="string">all</span>
+clearvars
+clc
+</pre>
+<h2 id="2">load the grfJump.mat</h2>
+<pre class="codeinput">load(<span class="string">"grfJump.mat"</span>);
+</pre>
+<h2 id="3">create a function version of the zybook lab, Coding: Jumping analyses</h2>
+<p>[h_impulse, h_t_air] = do_jump_analyses(jumpdata) this will be a separate .m file</p>
+<h2 id="4">get heights for all trials using the do_jump_analyses you wrote</h2>
+<pre class="codeinput">
+<span class="comment">%%CM Jump</span>
+<span class="comment">%Subjet 1</span>
+[S1_CM_Imp_h_trial1, S1_CM_Tair_h_trail1] = do_jump_analyses(S1_CMJump1);
+[S1_CM_Imp_h_trial2, S1_CM_Tair_h_trail2] = do_jump_analyses(S1_CMJump2);
+[S1_CM_Imp_h_trial3, S1_CM_Tair_h_trail3] = do_jump_analyses(S1_CMJump3);
+[S1_CM_Imp_h_trial4, S1_CM_Tair_h_trail4] = do_jump_analyses(S1_CMJump4);
+[S1_CM_Imp_h_trial5, S1_CM_Tair_h_trail5] = do_jump_analyses(S1_CMJump5);
+<span class="comment">%Subject 4</span>
+[S4_CM_Imp_h_trial1, S4_CM_Tair_h_trail1] = do_jump_analyses(S4_CMJump1);
+[S4_CM_Imp_h_trial2, S4_CM_Tair_h_trail2] = do_jump_analyses(S4_CMJump2);
+[S4_CM_Imp_h_trial3, S4_CM_Tair_h_trail3] = do_jump_analyses(S4_CMJump3);
+[S4_CM_Imp_h_trial4, S4_CM_Tair_h_trail4] = do_jump_analyses(S4_CMJump4);
+[S4_CM_Imp_h_trial5, S4_CM_Tair_h_trail5] = do_jump_analyses(S4_CMJump5);
+<span class="comment">%Subject 5</span>
+[S5_CM_Imp_h_trial1, S5_CM_Tair_h_trail1] = do_jump_analyses(S5_CMJump1);
+[S5_CM_Imp_h_trial2, S5_CM_Tair_h_trail2] = do_jump_analyses(S5_CMJump2);
+[S5_CM_Imp_h_trial3, S5_CM_Tair_h_trail3] = do_jump_analyses(S5_CMJump3);
+[S5_CM_Imp_h_trial4, S5_CM_Tair_h_trail4] = do_jump_analyses(S5_CMJump4);
+[S5_CM_Imp_h_trial5, S5_CM_Tair_h_trail5] = do_jump_analyses(S5_CMJump5);
+
+<span class="comment">%%Squat Jump</span>
+<span class="comment">%Subjet 1</span>
+[S1_SJ_Imp_h_trial1, S1_SJ_Tair_h_trail1] = do_jump_analyses(S1_squatJump1);
+[S1_SJ_Imp_h_trial2, S1_SJ_Tair_h_trail2] = do_jump_analyses(S1_squatJump2);
+[S1_SJ_Imp_h_trial3, S1_SJ_Tair_h_trail3] = do_jump_analyses(S1_squatJump3);
+[S1_SJ_Imp_h_trial4, S1_SJ_Tair_h_trail4] = do_jump_analyses(S1_squatJump4);
+[S1_SJ_Imp_h_trial5, S1_SJ_Tair_h_trail5] = do_jump_analyses(S1_squatJump5);
+<span class="comment">%Subject 4</span>
+[S4_SJ_Imp_h_trial1, S4_SJ_Tair_h_trail1] = do_jump_analyses(S4_squatJump1);
+[S4_SJ_Imp_h_trial2, S4_SJ_Tair_h_trail2] = do_jump_analyses(S4_squatJump2);
+[S4_SJ_Imp_h_trial3, S4_SJ_Tair_h_trail3] = do_jump_analyses(S4_squatJump3);
+[S4_SJ_Imp_h_trial4, S4_SJ_Tair_h_trail4] = do_jump_analyses(S4_squatJump4);
+[S4_SJ_Imp_h_trial5, S4_SJ_Tair_h_trail5] = do_jump_analyses(S4_squatJump5);
+<span class="comment">%Subject 5</span>
+[S5_SJ_Imp_h_trial1, S5_SJ_Tair_h_trail1] = do_jump_analyses(S5_squatJump1);
+[S5_SJ_Imp_h_trial2, S5_SJ_Tair_h_trail2] = do_jump_analyses(S5_squatJump2);
+[S5_SJ_Imp_h_trial3, S5_SJ_Tair_h_trail3] = do_jump_analyses(S5_squatJump3);
+[S5_SJ_Imp_h_trial4, S5_SJ_Tair_h_trail4] = do_jump_analyses(S5_squatJump4);
+[S5_SJ_Imp_h_trial5, S5_SJ_Tair_h_trail5] = do_jump_analyses(S5_squatJump5);
+</pre>
+<pre class="codeoutput">Height (Impulse-Momentum): 0.24173 m
+Height (Time in Air): 0.2374 m
+Height (Impulse-Momentum): 0.26751 m
+Height (Time in Air): 0.25164 m
+Height (Impulse-Momentum): 0.27348 m
+Height (Time in Air): 0.24283 m
+Height (Impulse-Momentum): 0.23298 m
+Height (Time in Air): 0.23632 m
+Height (Impulse-Momentum): 0.26207 m
+Height (Time in Air): 0.24392 m
+Height (Impulse-Momentum): 0.21029 m
+Height (Time in Air): 0.20815 m
+Height (Impulse-Momentum): 0.20871 m
+Height (Time in Air): 0.21221 m
+Height (Impulse-Momentum): 0.19963 m
+Height (Time in Air): 0.19327 m
+Height (Impulse-Momentum): 0.20404 m
+Height (Time in Air): 0.20513 m
+Height (Impulse-Momentum): 0.20858 m
+Height (Time in Air): 0.19718 m
+Height (Impulse-Momentum): 0.27615 m
+Height (Time in Air): 0.25835 m
+Height (Impulse-Momentum): 0.26448 m
+Height (Time in Air): 0.25386 m
+Height (Impulse-Momentum): 0.25157 m
+Height (Time in Air): 0.23632 m
+Height (Impulse-Momentum): 0.26913 m
+Height (Time in Air): 0.25386 m
+Height (Impulse-Momentum): 0.26583 m
+Height (Time in Air): 0.25498 m
+Height (Impulse-Momentum): 0.21193 m
+Height (Time in Air): 0.21528 m
+Height (Impulse-Momentum): 0.20071 m
+Height (Time in Air): 0.20413 m
+Height (Impulse-Momentum): 0.20797 m
+Height (Time in Air): 0.20916 m
+Height (Impulse-Momentum): 0.21284 m
+Height (Time in Air): 0.21528 m
+Height (Impulse-Momentum): 0.18591 m
+Height (Time in Air): 0.1846 m
+Height (Impulse-Momentum): 0.17248 m
+Height (Time in Air): 0.178 m
+Height (Impulse-Momentum): 0.19464 m
+Height (Time in Air): 0.19036 m
+Height (Impulse-Momentum): 0.18855 m
+Height (Time in Air): 0.18651 m
+Height (Impulse-Momentum): 0.17731 m
+Height (Time in Air): 0.16697 m
+Height (Impulse-Momentum): 0.18308 m
+Height (Time in Air): 0.178 m
+Height (Impulse-Momentum): 0.19214 m
+Height (Time in Air): 0.17894 m
+Height (Impulse-Momentum): 0.21073 m
+Height (Time in Air): 0.20213 m
+Height (Impulse-Momentum): 0.21531 m
+Height (Time in Air): 0.20014 m
+Height (Impulse-Momentum): 0.2162 m
+Height (Time in Air): 0.21221 m
+Height (Impulse-Momentum): 0.19961 m
+Height (Time in Air): 0.19522 m
+</pre>
+<h2 id="5">Create a figure to help compare which jump type produced a higher jump</h2>
+<p>Use 6 subplots arranged in 3 rows for each subject (S1, S4, S5) and 2 columns for the 2 methods (impulse, time in air)</p>
+<p>In each subplot, plot a bar graph of the average of the jump heights with error bars of the standard deviation of the jump heights.</p>
+<p>One bar is for the CMJump and the other bar is for the squatjump</p>
+<p>Remember to label everything so it's clear what the figure is showing</p>
+<h2 id="6">Create a figure to help compare differences in approach</h2>
+<p>Use 6 subplots arranged in 3 rows for each subject and 2 columns for the 2 jump types</p>
+<p>In each subplot, plot a bar graph of the average jump height with error bars of the standard deviation.</p>
+<p>One bar is for the impulse and the other bar is for the time in air</p>
+<p>Remember to label everything so it's clear what the figure is showing</p>
+<h2 id="7">Mean and Standard Deviation Calculations</h2>
+<pre class="codeinput">
+<span class="comment">% Subject 1 - CM Jump</span>
+S1_CM_Imp_heights = [S1_CM_Imp_h_trial1, S1_CM_Imp_h_trial2, S1_CM_Imp_h_trial3, S1_CM_Imp_h_trial4, S1_CM_Imp_h_trial5];
+S1_CM_Tair_heights = [S1_CM_Tair_h_trail1, S1_CM_Tair_h_trail2, S1_CM_Tair_h_trail3, S1_CM_Tair_h_trail4, S1_CM_Tair_h_trail5];
+S1_CM_Imp_mean = mean(S1_CM_Imp_heights);
+S1_CM_Imp_std = std(S1_CM_Imp_heights);
+S1_CM_Tair_mean = mean(S1_CM_Tair_heights);
+S1_CM_Tair_std = std(S1_CM_Tair_heights);
+
+<span class="comment">% Subject 1 - Squat Jump</span>
+S1_SJ_Imp_heights = [S1_SJ_Imp_h_trial1, S1_SJ_Imp_h_trial2, S1_SJ_Imp_h_trial3, S1_SJ_Imp_h_trial4, S1_SJ_Imp_h_trial5];
+S1_SJ_Tair_heights = [S1_SJ_Tair_h_trail1, S1_SJ_Tair_h_trail2, S1_SJ_Tair_h_trail3, S1_SJ_Tair_h_trail4, S1_SJ_Tair_h_trail5];
+S1_SJ_Imp_mean = mean(S1_SJ_Imp_heights);
+S1_SJ_Imp_std = std(S1_SJ_Imp_heights);
+S1_SJ_Tair_mean = mean(S1_SJ_Tair_heights);
+S1_SJ_Tair_std = std(S1_SJ_Tair_heights);
+
+<span class="comment">% Subject 4 - CM Jump</span>
+S4_CM_Imp_heights = [S4_CM_Imp_h_trial1, S4_CM_Imp_h_trial2, S4_CM_Imp_h_trial3, S4_CM_Imp_h_trial4, S4_CM_Imp_h_trial5];
+S4_CM_Tair_heights = [S4_CM_Tair_h_trail1, S4_CM_Tair_h_trail2, S4_CM_Tair_h_trail3, S4_CM_Tair_h_trail4, S4_CM_Tair_h_trail5];
+S4_CM_Imp_mean = mean(S4_CM_Imp_heights);
+S4_CM_Imp_std = std(S4_CM_Imp_heights);
+S4_CM_Tair_mean = mean(S4_CM_Tair_heights);
+S4_CM_Tair_std = std(S4_CM_Tair_heights);
+
+<span class="comment">% Subject 4 - Squat Jump</span>
+S4_SJ_Imp_heights = [S4_SJ_Imp_h_trial1, S4_SJ_Imp_h_trial2, S4_SJ_Imp_h_trial3, S4_SJ_Imp_h_trial4, S4_SJ_Imp_h_trial5];
+S4_SJ_Tair_heights = [S4_SJ_Tair_h_trail1, S4_SJ_Tair_h_trail2, S4_SJ_Tair_h_trail3, S4_SJ_Tair_h_trail4, S4_SJ_Tair_h_trail5];
+S4_SJ_Imp_mean = mean(S4_SJ_Imp_heights);
+S4_SJ_Imp_std = std(S4_SJ_Imp_heights);
+S4_SJ_Tair_mean = mean(S4_SJ_Tair_heights);
+S4_SJ_Tair_std = std(S4_SJ_Tair_heights);
+
+<span class="comment">% Subject 5 - CM Jump</span>
+S5_CM_Imp_heights = [S5_CM_Imp_h_trial1, S5_CM_Imp_h_trial2, S5_CM_Imp_h_trial3, S5_CM_Imp_h_trial4, S5_CM_Imp_h_trial5];
+S5_CM_Tair_heights = [S5_CM_Tair_h_trail1, S5_CM_Tair_h_trail2, S5_CM_Tair_h_trail3, S5_CM_Tair_h_trail4, S5_CM_Tair_h_trail5];
+S5_CM_Imp_mean = mean(S5_CM_Imp_heights);
+S5_CM_Imp_std = std(S5_CM_Imp_heights);
+S5_CM_Tair_mean = mean(S5_CM_Tair_heights);
+S5_CM_Tair_std = std(S5_CM_Tair_heights);
+
+<span class="comment">% Subject 5 - Squat Jump</span>
+S5_SJ_Imp_heights = [S5_SJ_Imp_h_trial1, S5_SJ_Imp_h_trial2, S5_SJ_Imp_h_trial3, S5_SJ_Imp_h_trial4, S5_SJ_Imp_h_trial5];
+S5_SJ_Tair_heights = [S5_SJ_Tair_h_trail1, S5_SJ_Tair_h_trail2, S5_SJ_Tair_h_trail3, S5_SJ_Tair_h_trail4, S5_SJ_Tair_h_trail5];
+S5_SJ_Imp_mean = mean(S5_SJ_Imp_heights);
+S5_SJ_Imp_std = std(S5_SJ_Imp_heights);
+S5_SJ_Tair_mean = mean(S5_SJ_Tair_heights);
+S5_SJ_Tair_std = std(S5_SJ_Tair_heights);
+
+
+
+<span class="comment">% Subject 1</span>
+subplot(3, 2, 1);
+bar([S1_CM_Imp_mean, S1_CM_Tair_mean]);
+hold <span class="string">on</span>;
+errorbar([1, 2], [S1_CM_Imp_mean, S1_CM_Tair_mean], [S1_CM_Imp_std, S1_CM_Tair_std]);
+xticks([1, 2]);
+xticklabels({<span class="string">'Impulse'</span>, <span class="string">'Time in Air'</span>});
+ylabel(<span class="string">'Jump Height (m)'</span>);
+title(<span class="string">'Subject 1 - CM Jump'</span>);
+grid <span class="string">on</span>;
+
+subplot(3, 2, 2);
+bar([S1_SJ_Imp_mean, S1_SJ_Tair_mean]);
+hold <span class="string">on</span>;
+errorbar([1, 2], [S1_SJ_Imp_mean, S1_SJ_Tair_mean], [S1_SJ_Imp_std, S1_SJ_Tair_std]);
+xticks([1, 2]);
+xticklabels({<span class="string">'Impulse'</span>, <span class="string">'Time in Air'</span>});
+title(<span class="string">'Subject 1 - Squat Jump'</span>);
+grid <span class="string">on</span>;
+
+<span class="comment">% Subject 4</span>
+subplot(3, 2, 3);
+bar([S4_CM_Imp_mean, S4_CM_Tair_mean]);
+hold <span class="string">on</span>;
+errorbar([1, 2], [S4_CM_Imp_mean, S4_CM_Tair_mean], [S4_CM_Imp_std, S4_CM_Tair_std]);
+xticks([1, 2]);
+xticklabels({<span class="string">'Impulse'</span>, <span class="string">'Time in Air'</span>});
+ylabel(<span class="string">'Jump Height (m)'</span>);
+title(<span class="string">'Subject 4 - CM Jump'</span>);
+grid <span class="string">on</span>;
+
+subplot(3, 2, 4);
+bar([S4_SJ_Imp_mean, S4_SJ_Tair_mean]);
+hold <span class="string">on</span>;
+errorbar([1, 2], [S4_SJ_Imp_mean, S4_SJ_Tair_mean], [S4_SJ_Imp_std, S4_SJ_Tair_std]);
+xticks([1, 2]);
+xticklabels({<span class="string">'Impulse'</span>, <span class="string">'Time in Air'</span>});
+title(<span class="string">'Subject 4 - Squat Jump'</span>);
+grid <span class="string">on</span>;
+
+<span class="comment">% Subject 5</span>
+subplot(3, 2, 5);
+bar([S5_CM_Imp_mean, S5_CM_Tair_mean]);
+hold <span class="string">on</span>;
+errorbar([1, 2], [S5_CM_Imp_mean, S5_CM_Tair_mean], [S5_CM_Imp_std, S5_CM_Tair_std]);
+xticks([1, 2]);
+xticklabels({<span class="string">'Impulse'</span>, <span class="string">'Time in Air'</span>});
+ylabel(<span class="string">'Jump Height (m)'</span>);
+title(<span class="string">'Subject 5 - CM Jump'</span>);
+grid <span class="string">on</span>;
+
+
+subplot(3, 2, 6);
+bar([S5_SJ_Imp_mean, S5_SJ_Tair_mean]);
+hold <span class="string">on</span>;
+errorbar([1, 2], [S5_SJ_Imp_mean, S5_SJ_Tair_mean], [S5_SJ_Imp_std, S5_SJ_Tair_std]);
+xticks([1, 2]);
+xticklabels({<span class="string">'Impulse'</span>, <span class="string">'Time in Air'</span>});
+title(<span class="string">'Subject 4 - Squat Jump'</span>);
+grid <span class="string">on</span>;
+</pre>
+<img vspace="5" hspace="5" src="coding_jumping_01.png" alt=""> <p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024a</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% ** Jumping analysis **
+close all
+clearvars
+clc
+%% load the grfJump.mat
+load("grfJump.mat");
+
+%% create a function version of the zybook lab, Coding: Jumping analyses
+% [h_impulse, h_t_air] = do_jump_analyses(jumpdata)
+% this will be a separate .m file
+%% get heights for all trials using the do_jump_analyses you wrote
+
+%%CM Jump
+%Subjet 1
+[S1_CM_Imp_h_trial1, S1_CM_Tair_h_trail1] = do_jump_analyses(S1_CMJump1);
+[S1_CM_Imp_h_trial2, S1_CM_Tair_h_trail2] = do_jump_analyses(S1_CMJump2);
+[S1_CM_Imp_h_trial3, S1_CM_Tair_h_trail3] = do_jump_analyses(S1_CMJump3);
+[S1_CM_Imp_h_trial4, S1_CM_Tair_h_trail4] = do_jump_analyses(S1_CMJump4);
+[S1_CM_Imp_h_trial5, S1_CM_Tair_h_trail5] = do_jump_analyses(S1_CMJump5);
+%Subject 4
+[S4_CM_Imp_h_trial1, S4_CM_Tair_h_trail1] = do_jump_analyses(S4_CMJump1);
+[S4_CM_Imp_h_trial2, S4_CM_Tair_h_trail2] = do_jump_analyses(S4_CMJump2);
+[S4_CM_Imp_h_trial3, S4_CM_Tair_h_trail3] = do_jump_analyses(S4_CMJump3);
+[S4_CM_Imp_h_trial4, S4_CM_Tair_h_trail4] = do_jump_analyses(S4_CMJump4);
+[S4_CM_Imp_h_trial5, S4_CM_Tair_h_trail5] = do_jump_analyses(S4_CMJump5);
+%Subject 5
+[S5_CM_Imp_h_trial1, S5_CM_Tair_h_trail1] = do_jump_analyses(S5_CMJump1);
+[S5_CM_Imp_h_trial2, S5_CM_Tair_h_trail2] = do_jump_analyses(S5_CMJump2);
+[S5_CM_Imp_h_trial3, S5_CM_Tair_h_trail3] = do_jump_analyses(S5_CMJump3);
+[S5_CM_Imp_h_trial4, S5_CM_Tair_h_trail4] = do_jump_analyses(S5_CMJump4);
+[S5_CM_Imp_h_trial5, S5_CM_Tair_h_trail5] = do_jump_analyses(S5_CMJump5);
+
+%%Squat Jump
+%Subjet 1
+[S1_SJ_Imp_h_trial1, S1_SJ_Tair_h_trail1] = do_jump_analyses(S1_squatJump1);
+[S1_SJ_Imp_h_trial2, S1_SJ_Tair_h_trail2] = do_jump_analyses(S1_squatJump2);
+[S1_SJ_Imp_h_trial3, S1_SJ_Tair_h_trail3] = do_jump_analyses(S1_squatJump3);
+[S1_SJ_Imp_h_trial4, S1_SJ_Tair_h_trail4] = do_jump_analyses(S1_squatJump4);
+[S1_SJ_Imp_h_trial5, S1_SJ_Tair_h_trail5] = do_jump_analyses(S1_squatJump5);
+%Subject 4
+[S4_SJ_Imp_h_trial1, S4_SJ_Tair_h_trail1] = do_jump_analyses(S4_squatJump1);
+[S4_SJ_Imp_h_trial2, S4_SJ_Tair_h_trail2] = do_jump_analyses(S4_squatJump2);
+[S4_SJ_Imp_h_trial3, S4_SJ_Tair_h_trail3] = do_jump_analyses(S4_squatJump3);
+[S4_SJ_Imp_h_trial4, S4_SJ_Tair_h_trail4] = do_jump_analyses(S4_squatJump4);
+[S4_SJ_Imp_h_trial5, S4_SJ_Tair_h_trail5] = do_jump_analyses(S4_squatJump5);
+%Subject 5
+[S5_SJ_Imp_h_trial1, S5_SJ_Tair_h_trail1] = do_jump_analyses(S5_squatJump1);
+[S5_SJ_Imp_h_trial2, S5_SJ_Tair_h_trail2] = do_jump_analyses(S5_squatJump2);
+[S5_SJ_Imp_h_trial3, S5_SJ_Tair_h_trail3] = do_jump_analyses(S5_squatJump3);
+[S5_SJ_Imp_h_trial4, S5_SJ_Tair_h_trail4] = do_jump_analyses(S5_squatJump4);
+[S5_SJ_Imp_h_trial5, S5_SJ_Tair_h_trail5] = do_jump_analyses(S5_squatJump5);
+
+
+%% Create a figure to help compare which jump type produced a higher jump
+%
+% Use 6 subplots arranged in 3 rows for each subject (S1, S4, S5)
+% and 2 columns for the 2 methods (impulse, time in air)
+%
+% In each subplot, plot a bar graph of the average of the jump heights
+% with error bars of the standard deviation of the jump heights.
+%
+% One bar is for the CMJump and the other bar is for the squatjump
+%
+% Remember to label everything so it's clear what the figure is showing
+%% Create a figure to help compare differences in approach
+%
+% Use 6 subplots arranged in 3 rows for each subject
+% and 2 columns for the 2 jump types
+%
+% In each subplot, plot a bar graph of the average jump height
+% with error bars of the standard deviation.
+%
+% One bar is for the impulse and the other bar is for the time in air
+%
+% Remember to label everything so it's clear what the figure is showing
+
+
+%% Mean and Standard Deviation Calculations
+
+% Subject 1 - CM Jump
+S1_CM_Imp_heights = [S1_CM_Imp_h_trial1, S1_CM_Imp_h_trial2, S1_CM_Imp_h_trial3, S1_CM_Imp_h_trial4, S1_CM_Imp_h_trial5];
+S1_CM_Tair_heights = [S1_CM_Tair_h_trail1, S1_CM_Tair_h_trail2, S1_CM_Tair_h_trail3, S1_CM_Tair_h_trail4, S1_CM_Tair_h_trail5];
+S1_CM_Imp_mean = mean(S1_CM_Imp_heights); 
+S1_CM_Imp_std = std(S1_CM_Imp_heights);  
+S1_CM_Tair_mean = mean(S1_CM_Tair_heights); 
+S1_CM_Tair_std = std(S1_CM_Tair_heights);   
+
+% Subject 1 - Squat Jump
+S1_SJ_Imp_heights = [S1_SJ_Imp_h_trial1, S1_SJ_Imp_h_trial2, S1_SJ_Imp_h_trial3, S1_SJ_Imp_h_trial4, S1_SJ_Imp_h_trial5];
+S1_SJ_Tair_heights = [S1_SJ_Tair_h_trail1, S1_SJ_Tair_h_trail2, S1_SJ_Tair_h_trail3, S1_SJ_Tair_h_trail4, S1_SJ_Tair_h_trail5];
+S1_SJ_Imp_mean = mean(S1_SJ_Imp_heights);
+S1_SJ_Imp_std = std(S1_SJ_Imp_heights);
+S1_SJ_Tair_mean = mean(S1_SJ_Tair_heights);
+S1_SJ_Tair_std = std(S1_SJ_Tair_heights);
+
+% Subject 4 - CM Jump
+S4_CM_Imp_heights = [S4_CM_Imp_h_trial1, S4_CM_Imp_h_trial2, S4_CM_Imp_h_trial3, S4_CM_Imp_h_trial4, S4_CM_Imp_h_trial5];
+S4_CM_Tair_heights = [S4_CM_Tair_h_trail1, S4_CM_Tair_h_trail2, S4_CM_Tair_h_trail3, S4_CM_Tair_h_trail4, S4_CM_Tair_h_trail5];
+S4_CM_Imp_mean = mean(S4_CM_Imp_heights); 
+S4_CM_Imp_std = std(S4_CM_Imp_heights);   
+S4_CM_Tair_mean = mean(S4_CM_Tair_heights); 
+S4_CM_Tair_std = std(S4_CM_Tair_heights);   
+
+% Subject 4 - Squat Jump
+S4_SJ_Imp_heights = [S4_SJ_Imp_h_trial1, S4_SJ_Imp_h_trial2, S4_SJ_Imp_h_trial3, S4_SJ_Imp_h_trial4, S4_SJ_Imp_h_trial5];
+S4_SJ_Tair_heights = [S4_SJ_Tair_h_trail1, S4_SJ_Tair_h_trail2, S4_SJ_Tair_h_trail3, S4_SJ_Tair_h_trail4, S4_SJ_Tair_h_trail5];
+S4_SJ_Imp_mean = mean(S4_SJ_Imp_heights);
+S4_SJ_Imp_std = std(S4_SJ_Imp_heights);
+S4_SJ_Tair_mean = mean(S4_SJ_Tair_heights);
+S4_SJ_Tair_std = std(S4_SJ_Tair_heights);
+
+% Subject 5 - CM Jump
+S5_CM_Imp_heights = [S5_CM_Imp_h_trial1, S5_CM_Imp_h_trial2, S5_CM_Imp_h_trial3, S5_CM_Imp_h_trial4, S5_CM_Imp_h_trial5];
+S5_CM_Tair_heights = [S5_CM_Tair_h_trail1, S5_CM_Tair_h_trail2, S5_CM_Tair_h_trail3, S5_CM_Tair_h_trail4, S5_CM_Tair_h_trail5];
+S5_CM_Imp_mean = mean(S5_CM_Imp_heights);
+S5_CM_Imp_std = std(S5_CM_Imp_heights);   
+S5_CM_Tair_mean = mean(S5_CM_Tair_heights);
+S5_CM_Tair_std = std(S5_CM_Tair_heights);   
+
+% Subject 5 - Squat Jump
+S5_SJ_Imp_heights = [S5_SJ_Imp_h_trial1, S5_SJ_Imp_h_trial2, S5_SJ_Imp_h_trial3, S5_SJ_Imp_h_trial4, S5_SJ_Imp_h_trial5];
+S5_SJ_Tair_heights = [S5_SJ_Tair_h_trail1, S5_SJ_Tair_h_trail2, S5_SJ_Tair_h_trail3, S5_SJ_Tair_h_trail4, S5_SJ_Tair_h_trail5];
+S5_SJ_Imp_mean = mean(S5_SJ_Imp_heights);
+S5_SJ_Imp_std = std(S5_SJ_Imp_heights);
+S5_SJ_Tair_mean = mean(S5_SJ_Tair_heights);
+S5_SJ_Tair_std = std(S5_SJ_Tair_heights);
+
+
+
+% Subject 1
+subplot(3, 2, 1);
+bar([S1_CM_Imp_mean, S1_CM_Tair_mean]); 
+hold on;
+errorbar([1, 2], [S1_CM_Imp_mean, S1_CM_Tair_mean], [S1_CM_Imp_std, S1_CM_Tair_std]);
+xticks([1, 2]);
+xticklabels({'Impulse', 'Time in Air'});
+ylabel('Jump Height (m)');
+title('Subject 1 - CM Jump');
+grid on;
+
+subplot(3, 2, 2);
+bar([S1_SJ_Imp_mean, S1_SJ_Tair_mean]); 
+hold on;
+errorbar([1, 2], [S1_SJ_Imp_mean, S1_SJ_Tair_mean], [S1_SJ_Imp_std, S1_SJ_Tair_std]);
+xticks([1, 2]);
+xticklabels({'Impulse', 'Time in Air'});
+title('Subject 1 - Squat Jump');
+grid on;
+
+% Subject 4
+subplot(3, 2, 3);
+bar([S4_CM_Imp_mean, S4_CM_Tair_mean]); 
+hold on;
+errorbar([1, 2], [S4_CM_Imp_mean, S4_CM_Tair_mean], [S4_CM_Imp_std, S4_CM_Tair_std]);
+xticks([1, 2]);
+xticklabels({'Impulse', 'Time in Air'});
+ylabel('Jump Height (m)');
+title('Subject 4 - CM Jump');
+grid on;
+
+subplot(3, 2, 4);
+bar([S4_SJ_Imp_mean, S4_SJ_Tair_mean]); 
+hold on;
+errorbar([1, 2], [S4_SJ_Imp_mean, S4_SJ_Tair_mean], [S4_SJ_Imp_std, S4_SJ_Tair_std]);
+xticks([1, 2]);
+xticklabels({'Impulse', 'Time in Air'});
+title('Subject 4 - Squat Jump');
+grid on;
+
+% Subject 5
+subplot(3, 2, 5);
+bar([S5_CM_Imp_mean, S5_CM_Tair_mean]); 
+hold on;
+errorbar([1, 2], [S5_CM_Imp_mean, S5_CM_Tair_mean], [S5_CM_Imp_std, S5_CM_Tair_std]);
+xticks([1, 2]);
+xticklabels({'Impulse', 'Time in Air'});
+ylabel('Jump Height (m)');
+title('Subject 5 - CM Jump');
+grid on;
+
+
+subplot(3, 2, 6);
+bar([S5_SJ_Imp_mean, S5_SJ_Tair_mean]); 
+hold on;
+errorbar([1, 2], [S5_SJ_Imp_mean, S5_SJ_Tair_mean], [S5_SJ_Imp_std, S5_SJ_Tair_std]);
+xticks([1, 2]);
+xticklabels({'Impulse', 'Time in Air'});
+title('Subject 4 - Squat Jump');
+grid on;
+##### SOURCE END #####
+-->
+</body>
+</html>
