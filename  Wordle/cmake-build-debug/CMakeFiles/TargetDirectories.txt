@@ -1,0 +1,3 @@
+/Users/juanleon/Desktop/School/Passed classes/COP 3223/Assignments/Assignment #5: Wordle/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/juanleon/Desktop/School/Passed classes/COP 3223/Assignments/Assignment #5: Wordle/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/juanleon/Desktop/School/Passed classes/COP 3223/Assignments/Assignment #5: Wordle/cmake-build-debug/CMakeFiles/Assignment__5__Wordle.dir
